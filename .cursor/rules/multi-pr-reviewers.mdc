@@ -1,0 +1,19 @@
+---
+description: Always request multiple PR reviewers with correct GitHub login casing
+alwaysApply: true
+---
+
+# Multi-reviewer PRs (SunCulture)
+
+When the user asks to add reviewers or when opening a PR that needs human review:
+
+1. Request **more than one** reviewer unless they explicitly want a single person.
+2. Resolve each handle to its canonical login before requesting:
+   `gh api users/<handle> -q .login` (e.g. `baraka-mulumia` → `Baraka-Mulumia`,
+   `kelvinnjoseph` → `KelvinNJoseph`).
+3. Prefer `Devops/scripts/request-pr-reviewers/request-pr-reviewers.sh OWNER/REPO PR login…`
+   (or the REST `requested_reviewers` API with a JSON array of resolved logins).
+4. Do **not** use `@SunCulture/the-unit` team requests — Free org plan ignores them.
+5. After requesting, verify with `gh pr view <n> --json reviewRequests` and report
+   who was actually requested. If anyone is missing, say so and retry with the
+   canonical login.
